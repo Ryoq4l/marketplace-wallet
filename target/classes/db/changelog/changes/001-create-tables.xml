@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="001-create-wallets" author="ryoq">
+        <createTable tableName="wallets">
+            <column name="id" type="BINARY(16)">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_wallets"/>
+            </column>
+            <column name="user_id" type="BINARY(16)">
+                <constraints nullable="false" unique="true" uniqueConstraintName="uk_wallets_user_id"/>
+            </column>
+            <column name="available_balance" type="DECIMAL(19, 2)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="held_balance" type="DECIMAL(19, 2)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="currency" type="VARCHAR(3)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status" type="VARCHAR(20)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_at" type="DATETIME(6)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated_at" type="DATETIME(6)"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="002-create-transactions" author="ryoq">
+        <createTable tableName="transactions">
+            <column name="id" type="BINARY(16)">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_transactions"/>
+            </column>
+            <column name="wallet_id" type="BINARY(16)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="type" type="VARCHAR(20)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="amount" type="DECIMAL(19, 2)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status" type="VARCHAR(20)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="deal_id" type="BINARY(16)"/>
+            <column name="description" type="VARCHAR(250)"/>
+            <column name="created_at" type="DATETIME(6)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated_at" type="DATETIME(6)"/>
+        </createTable>
+    </changeSet>
+
+</databaseChangeLog>
