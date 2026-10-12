@@ -1,4 +1,4 @@
-package com.adelok.wallet_service.dto;
+package com.adelok.wallet_service.dto.responses;
 
 import com.adelok.wallet_service.entity.enumerated.Currency;
 import com.adelok.wallet_service.entity.enumerated.WalletStatus;

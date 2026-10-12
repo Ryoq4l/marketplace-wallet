@@ -1,6 +1,7 @@
 package com.adelok.wallet_service.controller;
 
-import com.adelok.wallet_service.dto.*;
+import com.adelok.wallet_service.dto.requests.*;
+import com.adelok.wallet_service.dto.responses.WalletResponse;
 import com.adelok.wallet_service.service.WalletService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -48,5 +49,26 @@ public class WalletController {
             @RequestBody HoldRequest request,
             @PathVariable UUID userId) {
         return ResponseEntity.ok(walletService.holdEscrow(userId, request));
+    }
+    @PostMapping("/user/{sellerId}/complete")
+    public ResponseEntity<WalletResponse> complete(
+            @Valid
+            @RequestBody CompleteRequest request,
+            @PathVariable UUID sellerId) {
+        return ResponseEntity.ok(walletService.completeToSeller(sellerId, request));
+    }
+    @PostMapping("/user/{buyerId}/refund")
+    public ResponseEntity<WalletResponse> refund(
+            @Valid
+            @RequestBody RefundRequest request,
+            @PathVariable UUID buyerId) {
+        return ResponseEntity.ok(walletService.refundToBuyer(buyerId, request));
+    }
+    @PostMapping("/user/{buyerId}/release")
+    public ResponseEntity<WalletResponse> release(
+            @Valid
+            @RequestBody ReleaseRequest request,
+            @PathVariable UUID buyerId) {
+        return ResponseEntity.ok(walletService.releaseFunds(buyerId, request));
     }
 }

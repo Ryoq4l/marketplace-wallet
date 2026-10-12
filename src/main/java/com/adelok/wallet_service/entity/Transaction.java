@@ -16,7 +16,7 @@ import java.util.UUID;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "transactions")
+@Table(name = "transactions", uniqueConstraints = @UniqueConstraint(name = "transaction_deal_type", columnNames = {"deal_id", "type"}))
 @Builder
 public class Transaction {
     @Id

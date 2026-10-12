@@ -1,4 +1,4 @@
-package com.adelok.wallet_service.dto;
+package com.adelok.wallet_service.dto.requests;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
