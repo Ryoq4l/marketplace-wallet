@@ -6,5 +6,6 @@ public enum TransactionType {
     HOLD,
     RELEASE,
     REFUND,
+    COMPLETE,
     FEE
 }

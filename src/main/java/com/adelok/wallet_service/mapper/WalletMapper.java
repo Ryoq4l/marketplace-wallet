@@ -1,6 +1,6 @@
 package com.adelok.wallet_service.mapper;
 
-import com.adelok.wallet_service.dto.WalletResponse;
+import com.adelok.wallet_service.dto.responses.WalletResponse;
 import com.adelok.wallet_service.entity.Wallet;
 import org.springframework.stereotype.Component;
 

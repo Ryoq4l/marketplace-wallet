@@ -1,4 +1,4 @@
-package com.adelok.wallet_service.dto;
+package com.adelok.wallet_service.dto.requests;
 
 import com.adelok.wallet_service.entity.enumerated.Currency;
 import jakarta.validation.constraints.NotNull;
