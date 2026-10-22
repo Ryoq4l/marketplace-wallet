@@ -39,7 +39,6 @@ public class WalletService {
         }
         Wallet wallet = Wallet.builder()
                 .userId(request.userId())
-                .currency(request.currency())
                 .build();
         Wallet saved = walletRepository.saveAndFlush(wallet);
         return walletMapper.toResponse(saved);

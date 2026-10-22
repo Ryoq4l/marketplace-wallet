@@ -1,6 +1,5 @@
 package com.adelok.wallet_service.dto.responses;
 
-import com.adelok.wallet_service.entity.enumerated.Currency;
 import com.adelok.wallet_service.entity.enumerated.WalletStatus;
 import lombok.Builder;
 
@@ -14,7 +13,6 @@ public record WalletResponse(
         BigDecimal availableBalance,
         BigDecimal heldBalance,
         BigDecimal totalBalance,
-        Currency currency,
         WalletStatus status,
         LocalDateTime createdAt
 ) {

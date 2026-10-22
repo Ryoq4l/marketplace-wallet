@@ -1,6 +1,5 @@
 package com.adelok.wallet_service.entity;
 
-import com.adelok.wallet_service.entity.enumerated.Currency;
 import com.adelok.wallet_service.entity.enumerated.WalletStatus;
 import jakarta.persistence.*;
 import lombok.*;
@@ -33,11 +32,6 @@ public class Wallet {
     @Builder.Default
     @Column(name = "held_balance", nullable = false)
     private BigDecimal heldBalance = BigDecimal.ZERO;
-
-    @Builder.Default
-    @Enumerated(EnumType.STRING)
-    @Column(name= "currency", nullable = false)
-    private Currency currency = Currency.USD;
 
     @Builder.Default
     @Enumerated(EnumType.STRING)

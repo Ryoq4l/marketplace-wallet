@@ -14,7 +14,6 @@ public class WalletMapper {
                 .availableBalance(wallet.getAvailableBalance())
                 .heldBalance(wallet.getHeldBalance())
                 .totalBalance(wallet.getTotalBalance())
-                .currency(wallet.getCurrency())
                 .status(wallet.getStatus())
                 .createdAt(wallet.getCreatedAt())
                 .build();
