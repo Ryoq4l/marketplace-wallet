@@ -32,7 +32,6 @@ public class WalletService {
     private final TransactionRepository transactionRepository;
     private final WalletMapper walletMapper;
 
-    //TODO: DISPUTE REVERSE
     @Transactional
     public WalletResponse create(CreateWalletRequest request) {
         if (walletRepository.existsByUserId(request.userId())) {

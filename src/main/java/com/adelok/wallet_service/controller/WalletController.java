@@ -57,6 +57,7 @@ public class WalletController {
             @PathVariable UUID sellerId) {
         return ResponseEntity.ok(walletService.completeToSeller(sellerId, request));
     }
+
     @PostMapping("/user/{buyerId}/refund")
     public ResponseEntity<WalletResponse> refund(
             @Valid
