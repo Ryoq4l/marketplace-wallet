@@ -9,21 +9,13 @@ import com.adelok.wallet_service.entity.enumerated.TransactionType;
 import com.adelok.wallet_service.entity.enumerated.WalletStatus;
 import com.adelok.wallet_service.exception.InsufficientFundsException;
 import com.adelok.wallet_service.exception.ResourceNotFoundException;
-import com.adelok.wallet_service.exception.WalletAlreadyExistsException;
 import com.adelok.wallet_service.exception.WalletNotActiveException;
 import com.adelok.wallet_service.mapper.WalletMapper;
 import com.adelok.wallet_service.repository.TransactionRepository;
 import com.adelok.wallet_service.repository.WalletRepository;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.server.ResponseStatusException;
-
 import java.util.UUID;
 
 @Service
