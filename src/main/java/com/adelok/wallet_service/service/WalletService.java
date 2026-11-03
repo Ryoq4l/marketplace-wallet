@@ -22,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.UUID;
 
@@ -35,7 +36,9 @@ public class WalletService {
     @Transactional
     public WalletResponse create(CreateWalletRequest request) {
         if (walletRepository.existsByUserId(request.userId())) {
-            throw new WalletAlreadyExistsException("Wallet already exists");
+            Wallet userWallet = walletRepository.findByUserId(request.userId())
+                    .orElseThrow(() -> new ResourceNotFoundException("Wallet not found"));
+            return walletMapper.toResponse(userWallet);
         }
         Wallet wallet = Wallet.builder()
                 .userId(request.userId())
