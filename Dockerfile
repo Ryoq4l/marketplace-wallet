@@ -6,6 +6,8 @@ ENV GITHUB_TOKEN=$GITHUB_TOKEN
 COPY settings.xml /root/.m2/settings.xml
 
 COPY pom.xml .
+RUN GITHUB_TOKEN=$GITHUB_TOKEN
+
 RUN mvn dependency:go-offline
 COPY src ./src
 RUN mvn package -DskipTests
