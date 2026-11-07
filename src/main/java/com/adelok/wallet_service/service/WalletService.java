@@ -68,6 +68,10 @@ public class WalletService {
 
     @Transactional
     public WalletResponse withdraw(UUID userId, WithdrawRequest withdrawRequest) {
+        if (withdrawRequest.dealId() != null &&
+                transactionRepository.existsByDealIdAndType(withdrawRequest.dealId(), TransactionType.DEPOSIT)) {
+            throw new IllegalStateException("Withdraw already processed for this deal");
+        }
         Wallet wallet = walletRepository.findByUserId(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("Wallet not found with userId " + userId));
         if (wallet.getAvailableBalance().compareTo(withdrawRequest.amount()) < 0) {
@@ -79,6 +83,7 @@ public class WalletService {
                 .walletId(wallet.getId())
                 .type(TransactionType.WITHDRAW)
                 .amount(withdrawRequest.amount())
+                .dealId(withdrawRequest.dealId())
                 .status(TransactionStatus.COMPLETED)
                 .build();
         transactionRepository.saveAndFlush(transaction);
