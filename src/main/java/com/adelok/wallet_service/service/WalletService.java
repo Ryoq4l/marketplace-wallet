@@ -48,6 +48,10 @@ public class WalletService {
 
     @Transactional
     public WalletResponse deposit(UUID userId, DepositRequest depositRequest) {
+        if (depositRequest.dealId() != null &&
+                transactionRepository.existsByDealIdAndType(depositRequest.dealId(), TransactionType.DEPOSIT)) {
+            throw new IllegalStateException("Deposit already processed for this deal");
+        }
         Wallet wallet = walletRepository.findByUserId(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("Wallet not found with userId " + userId));
         wallet.setAvailableBalance(wallet.getAvailableBalance().add(depositRequest.amount()));
@@ -55,6 +59,7 @@ public class WalletService {
                 .walletId(wallet.getId())
                 .type(TransactionType.DEPOSIT)
                 .amount(depositRequest.amount())
+                .dealId(depositRequest.dealId())
                 .status(TransactionStatus.COMPLETED)
                 .build();
         transactionRepository.saveAndFlush(transaction);
