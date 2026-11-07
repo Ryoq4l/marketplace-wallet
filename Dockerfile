@@ -10,7 +10,7 @@ RUN GITHUB_TOKEN=$GITHUB_TOKEN
 
 RUN mvn dependency:go-offline
 COPY src ./src
-RUN mvn package -DskipTests
+RUN GITHUB_TOKEN=$GITHUB_TOKEN mvn clean package -DskipTests
 
 FROM eclipse-temurin:21-jre
 WORKDIR /app
