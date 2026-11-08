@@ -48,3 +48,5 @@ application-local.properties
 
 # Docker
 *.pid
+
+settings.xml
