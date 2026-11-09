@@ -67,7 +67,11 @@ management:
 springdoc:
   api-docs:
     server-url: http://localhost:8080/api/v1/wallets
-  use-forward-headers: true
+  use-management-port: false
+  show-actuator: true
+  swagger-ui:
+    disable-swagger-default-url: true
+    path: /swagger-ui.html
 
 logging:
   level:
