@@ -12,8 +12,8 @@ public record DepositRequest(
         @NotNull
         @DecimalMin(value = "0.01", message = "Amount must be at least 0.01")
         BigDecimal amount,
-        @NotNull
         UUID dealId,
+        UUID operationId,
         String description
 ) {
 }
