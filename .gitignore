@@ -1,5 +1,8 @@
 # Maven
 wallet/target/
+!.mvn/wrapper/maven-wrapper.jar
+*.class
+*.log
 pom.xml.tag
 pom.xml.releaseBackup
 pom.xml.versionsBackup
