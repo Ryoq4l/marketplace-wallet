@@ -39,7 +39,6 @@ spring:
       properties:
         spring.json.trusted.packages: "com.adelok.wallet_service.*"
 
-# ОБЯЗАТЕЛЬНО: секрет должен совпадать с marketplace-auth!
 jwt:
   secret: ${JWT_SECRET:dev-only-secret-change-me-in-production-1234567890abcdef}
 
@@ -64,6 +63,11 @@ management:
   endpoint:
     health:
       show-details: always
+
+springdoc:
+  api-docs:
+    server-url: http://localhost:8080/api/v1/wallets
+  use-forward-headers: true
 
 logging:
   level:
