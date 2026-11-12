@@ -48,20 +48,31 @@ public class WalletService {
 
     @Transactional
     public WalletResponse deposit(UUID userId, DepositRequest depositRequest) {
+
         if (depositRequest.dealId() != null &&
                 transactionRepository.existsByDealIdAndType(depositRequest.dealId(), TransactionType.DEPOSIT)) {
             throw new IllegalStateException("Deposit already processed for this deal");
         }
+
+        if (depositRequest.operationId() != null &&
+                transactionRepository.existsByOperationIdAndType(depositRequest.operationId(), TransactionType.DEPOSIT)) {
+            throw new IllegalStateException("Deposit already processed for this operation");
+        }
+
         Wallet wallet = walletRepository.findByUserId(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("Wallet not found with userId " + userId));
+
         wallet.setAvailableBalance(wallet.getAvailableBalance().add(depositRequest.amount()));
+
         Transaction transaction = Transaction.builder()
                 .walletId(wallet.getId())
                 .type(TransactionType.DEPOSIT)
                 .amount(depositRequest.amount())
                 .dealId(depositRequest.dealId())
+                .operationId(depositRequest.operationId())
                 .status(TransactionStatus.COMPLETED)
                 .build();
+
         transactionRepository.saveAndFlush(transaction);
         return walletMapper.toResponse(wallet);
     }
@@ -115,64 +126,6 @@ public class WalletService {
         transactionRepository.saveAndFlush(transaction);
         return walletMapper.toResponse(wallet);
     }
-
-    @Transactional
-    public WalletResponse releaseFunds(UUID buyerId, ReleaseRequest request) {
-        if (transactionRepository.existsByDealIdAndType(request.dealId(), TransactionType.RELEASE)) {
-            throw new IllegalStateException("Funds already been released");
-        }
-        Wallet buyerWallet = walletRepository.findByUserIdForUpdate(buyerId)
-                .orElseThrow(() -> new ResourceNotFoundException("There's no buyer with id " + buyerId));
-        Wallet sellerWallet = walletRepository.findByUserIdForUpdate(request.sellerId())
-                .orElseThrow(() -> new ResourceNotFoundException("There's no seller with id " + request.sellerId()));
-        if (buyerWallet.getStatus() != WalletStatus.ACTIVE) {
-            throw new WalletNotActiveException("Seems like your wallet was either blocked or closed, try again later: " + buyerWallet.getStatus());
-        }
-        if (buyerWallet.getHeldBalance().compareTo(request.amount()) < 0) {
-            throw new InsufficientFundsException("Insufficient funds");
-        }
-        buyerWallet.setHeldBalance(buyerWallet.getHeldBalance().subtract(request.amount()));
-        sellerWallet.setHeldBalance(sellerWallet.getHeldBalance().add(request.amount()));
-        Transaction transaction = Transaction.builder()
-                .walletId(buyerWallet.getId())
-                .type(TransactionType.RELEASE)
-                .amount(request.amount())
-                .dealId(request.dealId())
-                .status(TransactionStatus.COMPLETED)
-                .build();
-        transactionRepository.saveAndFlush(transaction);
-        walletRepository.save(sellerWallet);
-        walletRepository.save(buyerWallet);
-        return walletMapper.toResponse(buyerWallet);
-    }
-
-    @Transactional
-    public WalletResponse refundToBuyer(UUID buyerId, RefundRequest request) {
-        if (transactionRepository.existsByDealIdAndType(request.dealId(), TransactionType.REFUND)) {
-            throw new IllegalStateException("Refund has already been processed");
-        }
-        Wallet buyerWallet = walletRepository.findByUserIdForUpdate(buyerId)
-                .orElseThrow(() -> new ResourceNotFoundException("There's no buyer with id " + buyerId));
-        if (buyerWallet.getStatus() != WalletStatus.ACTIVE) {
-            throw new WalletNotActiveException("Seems like your wallet was either blocked or closed, try again later: " + buyerWallet.getStatus());
-        }
-        if (buyerWallet.getHeldBalance().compareTo(request.amount()) < 0) {
-            throw new InsufficientFundsException("Insufficient funds");
-        }
-        buyerWallet.setHeldBalance(buyerWallet.getHeldBalance().subtract(request.amount()));
-        buyerWallet.setAvailableBalance(buyerWallet.getAvailableBalance().add(request.amount()));
-        Transaction transaction = Transaction.builder()
-                .walletId(buyerWallet.getId())
-                .type(TransactionType.REFUND)
-                .amount(request.amount())
-                .dealId(request.dealId())
-                .status(TransactionStatus.COMPLETED)
-                .build();
-        walletRepository.save(buyerWallet);
-        transactionRepository.saveAndFlush(transaction);
-        return walletMapper.toResponse(buyerWallet);
-    }
-
     @Transactional
     public WalletResponse completeToSeller(UUID sellerId, CompleteRequest request) {
         if (transactionRepository.existsByDealIdAndType(request.dealId(), TransactionType.COMPLETE)) {

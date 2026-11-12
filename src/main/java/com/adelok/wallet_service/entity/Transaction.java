@@ -41,6 +41,9 @@ public class Transaction {
     @Column(name = "deal_id")
     private UUID dealId;
 
+    @Column(name = "operation_id")
+    private UUID operationId;
+
     @Column(length = 250)
     private String description;
 
