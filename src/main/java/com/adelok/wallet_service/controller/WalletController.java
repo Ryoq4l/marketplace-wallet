@@ -19,86 +19,47 @@ public class WalletController {
     private final WalletService walletService;
 
     @PostMapping
-    public ResponseEntity<WalletResponse> create(@Valid @RequestBody CreateWalletRequest request, @AuthenticationPrincipal String tokenUserId) {
-        if (!request.userId().toString().equals(tokenUserId)) {
-            throw new RuntimeException("Access Denied");
-        }
-        return ResponseEntity.status(HttpStatus.CREATED).body(walletService.create(request));
+    public ResponseEntity<WalletResponse> create(@AuthenticationPrincipal String tokenUserId) {
+        UUID userId = UUID.fromString(tokenUserId);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(walletService.create(new CreateWalletRequest(userId)));
     }
 
-    @GetMapping("/{userId}")
-    public ResponseEntity<WalletResponse> getByUserId(
-            @PathVariable UUID userId,
-            @AuthenticationPrincipal String tokenUserId) {
-        if (!userId.toString().equals(tokenUserId)) {
-            throw new RuntimeException("Access Denied");
-        }
+    @GetMapping
+    public ResponseEntity<WalletResponse> getMyWallet(@AuthenticationPrincipal String tokenUserId) {
+        UUID userId = UUID.fromString(tokenUserId);
         return ResponseEntity.ok(walletService.getByUserId(userId));
     }
 
-    @PostMapping("/{userId}/deposit")
+    @PostMapping("/deposit")
     public ResponseEntity<WalletResponse> deposit(
             @Valid @RequestBody DepositRequest request,
-            @PathVariable UUID userId,
             @AuthenticationPrincipal String tokenUserId) {
-        if (!userId.toString().equals(tokenUserId)) {
-            throw new RuntimeException("Access Denied");
-        }
+        UUID userId = UUID.fromString(tokenUserId);
         return ResponseEntity.ok(walletService.deposit(userId, request));
     }
 
-    @PostMapping("/{userId}/withdraw")
+    @PostMapping("/withdraw")
     public ResponseEntity<WalletResponse> withdraw(
             @Valid @RequestBody WithdrawRequest request,
-            @PathVariable UUID userId,
             @AuthenticationPrincipal String tokenUserId) {
-        if (!userId.toString().equals(tokenUserId)) {
-            throw new RuntimeException("Access Denied");
-        }
+        UUID userId = UUID.fromString(tokenUserId);
         return ResponseEntity.ok(walletService.withdraw(userId, request));
     }
 
-    @PostMapping("/{userId}/hold")
+    @PostMapping("/hold")
     public ResponseEntity<WalletResponse> hold(
             @Valid @RequestBody HoldRequest request,
-            @PathVariable UUID userId,
             @AuthenticationPrincipal String tokenUserId) {
-        if (!userId.toString().equals(tokenUserId)) {
-            throw new RuntimeException("Access Denied");
-        }
+        UUID userId = UUID.fromString(tokenUserId);
         return ResponseEntity.ok(walletService.holdEscrow(userId, request));
     }
 
-    @PostMapping("/{sellerId}/complete")
+    @PostMapping("/complete/{sellerId}")
     public ResponseEntity<WalletResponse> complete(
             @Valid @RequestBody CompleteRequest request,
             @PathVariable UUID sellerId,
             @AuthenticationPrincipal String tokenUserId) {
-        if (!sellerId.toString().equals(tokenUserId)) {
-            throw new RuntimeException("Access Denied");
-        }
         return ResponseEntity.ok(walletService.completeToSeller(sellerId, request));
-    }
-
-    @PostMapping("/{buyerId}/refund")
-    public ResponseEntity<WalletResponse> refund(
-            @Valid @RequestBody RefundRequest request,
-            @PathVariable UUID buyerId,
-            @AuthenticationPrincipal String tokenUserId) {
-        if (!buyerId.toString().equals(tokenUserId)) {
-            throw new RuntimeException("Access Denied");
-        }
-        return ResponseEntity.ok(walletService.refundToBuyer(buyerId, request));
-    }
-
-    @PostMapping("/{buyerId}/release")
-    public ResponseEntity<WalletResponse> release(
-            @Valid @RequestBody ReleaseRequest request,
-            @PathVariable UUID buyerId,
-            @AuthenticationPrincipal String tokenUserId) {
-        if (!buyerId.toString().equals(tokenUserId)) {
-            throw new RuntimeException("Access Denied");
-        }
-        return ResponseEntity.ok(walletService.releaseFunds(buyerId, request));
     }
 }
