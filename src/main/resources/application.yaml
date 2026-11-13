@@ -1,6 +1,4 @@
 spring:
-  config:
-    import: optional:file:.env[.properties]
   application:
     name: marketplace-wallet
   cloud:
@@ -12,7 +10,7 @@ spring:
   datasource:
     url: jdbc:mysql://${DB_HOST:localhost}:${DB_PORT:3306}/${DB_NAME:wallet_db}?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
     username: ${DB_USER:market_user}
-    password: ${DB_PASSWORD:market_pass}
+    password: ${DB_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   jpa:
@@ -40,7 +38,7 @@ spring:
         spring.json.trusted.packages: "com.adelok.wallet_service.*"
 
 jwt:
-  secret: ${JWT_SECRET:dev-only-secret-change-me-in-production-1234567890abcdef}
+  secret: ${JWT_SECRET}
 
 server:
   port: 6767

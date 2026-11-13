@@ -53,3 +53,7 @@ application-local.properties
 *.pid
 
 settings.xml
+# Локальные секреты и профили
+**/application-local.yaml
+**/application-local.yml
+secrets/
